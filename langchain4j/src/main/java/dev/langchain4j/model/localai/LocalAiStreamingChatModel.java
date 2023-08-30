@@ -4,6 +4,7 @@ import dev.ai4j.openai4j.OpenAiClient;
 import dev.ai4j.openai4j.chat.*;
 import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.data.message.ChatMessage;
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import lombok.Builder;
@@ -55,21 +56,21 @@ public class LocalAiStreamingChatModel implements StreamingChatLanguageModel {
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler) {
-        sendMessages(messages, null, null, handler);
+    public ResponseHandle sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler) {
+        return sendMessages(messages, null, null, handler);
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages, List<ToolSpecification> toolSpecifications, StreamingResponseHandler handler) {
-        sendMessages(messages, toolSpecifications, null, handler);
+    public ResponseHandle sendMessages(List<ChatMessage> messages, List<ToolSpecification> toolSpecifications, StreamingResponseHandler handler) {
+        return sendMessages(messages, toolSpecifications, null, handler);
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages, ToolSpecification toolSpecification, StreamingResponseHandler handler) {
-        sendMessages(messages, singletonList(toolSpecification), toolSpecification, handler);
+    public ResponseHandle sendMessages(List<ChatMessage> messages, ToolSpecification toolSpecification, StreamingResponseHandler handler) {
+        return sendMessages(messages, singletonList(toolSpecification), toolSpecification, handler);
     }
 
-    private void sendMessages(List<ChatMessage> messages,
+    private ResponseHandle sendMessages(List<ChatMessage> messages,
                               List<ToolSpecification> toolSpecifications,
                               ToolSpecification toolThatMustBeExecuted,
                               StreamingResponseHandler handler
@@ -91,11 +92,13 @@ public class LocalAiStreamingChatModel implements StreamingChatLanguageModel {
 
         ChatCompletionRequest request = requestBuilder.build();
 
-        client.chatCompletion(request)
+        dev.ai4j.openai4j.ResponseHandle responseHandle = client.chatCompletion(request)
                 .onPartialResponse(partialResponse -> handle(partialResponse, handler))
                 .onComplete(handler::onComplete)
                 .onError(handler::onError)
                 .execute();
+
+        return responseHandle::cancel;
     }
 
     private static void handle(ChatCompletionResponse partialResponse,

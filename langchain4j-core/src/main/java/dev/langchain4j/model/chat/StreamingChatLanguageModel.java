@@ -3,6 +3,7 @@ package dev.langchain4j.model.chat;
 import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.data.message.ChatMessage;
 import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.input.Prompt;
 
@@ -17,22 +18,22 @@ import static java.util.Collections.singletonList;
  */
 public interface StreamingChatLanguageModel {
 
-    default void sendUserMessage(String userMessage, StreamingResponseHandler handler) {
-        sendUserMessage(userMessage(userMessage), handler);
+    default ResponseHandle sendUserMessage(String userMessage, StreamingResponseHandler handler) {
+        return sendUserMessage(userMessage(userMessage), handler);
     }
 
-    default void sendUserMessage(UserMessage userMessage, StreamingResponseHandler handler) {
-        sendMessages(singletonList(userMessage), handler);
+    default ResponseHandle sendUserMessage(UserMessage userMessage, StreamingResponseHandler handler) {
+        return sendMessages(singletonList(userMessage), handler);
     }
 
-    default void sendUserMessage(Object structuredPrompt, StreamingResponseHandler handler) {
+    default ResponseHandle sendUserMessage(Object structuredPrompt, StreamingResponseHandler handler) {
         Prompt prompt = toPrompt(structuredPrompt);
-        sendUserMessage(prompt.toUserMessage(), handler);
+        return sendUserMessage(prompt.toUserMessage(), handler);
     }
 
-    void sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler);
+    ResponseHandle sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler);
 
-    void sendMessages(List<ChatMessage> messages, List<ToolSpecification> toolSpecifications, StreamingResponseHandler handler);
+    ResponseHandle sendMessages(List<ChatMessage> messages, List<ToolSpecification> toolSpecifications, StreamingResponseHandler handler);
 
-    void sendMessages(List<ChatMessage> messages, ToolSpecification toolSpecification, StreamingResponseHandler handler);
+    ResponseHandle sendMessages(List<ChatMessage> messages, ToolSpecification toolSpecification, StreamingResponseHandler handler);
 }

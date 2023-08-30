@@ -1,5 +1,6 @@
 package dev.langchain4j.model.dashscope;
 
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 
@@ -14,8 +15,8 @@ public class QwenStreamingLanguageModel extends QwenStreamingChatModel implement
     }
 
     @Override
-    public void process(String text, StreamingResponseHandler handler) {
-        sendMessage(text, handler);
+    public ResponseHandle process(String text, StreamingResponseHandler handler) {
+        return sendMessage(text, handler);
     }
 
     public static Builder builder() {

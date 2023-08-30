@@ -7,6 +7,7 @@ import com.alibaba.dashscope.exception.InputRequiredException;
 import com.alibaba.dashscope.exception.NoApiKeyException;
 import dev.langchain4j.agent.tool.ToolSpecification;
 import dev.langchain4j.data.message.ChatMessage;
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 
@@ -23,11 +24,11 @@ public class QwenStreamingChatModel extends QwenChatModel implements StreamingCh
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler) {
-        sendMessage(QwenParamHelper.toQwenPrompt(messages), handler);
+    public ResponseHandle sendMessages(List<ChatMessage> messages, StreamingResponseHandler handler) {
+        return sendMessage(QwenParamHelper.toQwenPrompt(messages), handler);
     }
 
-    protected void sendMessage(String prompt, StreamingResponseHandler handler) {
+    protected ResponseHandle sendMessage(String prompt, StreamingResponseHandler handler) {
         QwenParam param = QwenParam.builder()
                 .apiKey(apiKey)
                 .model(modelName)
@@ -44,10 +45,12 @@ public class QwenStreamingChatModel extends QwenChatModel implements StreamingCh
                 public void onEvent(GenerationResult result) {
                     handler.onNext(result.getOutput().getText());
                 }
+
                 @Override
                 public void onComplete() {
                     handler.onComplete();
                 }
+
                 @Override
                 public void onError(Exception e) {
                     handler.onError(e);
@@ -56,19 +59,21 @@ public class QwenStreamingChatModel extends QwenChatModel implements StreamingCh
         } catch (NoApiKeyException | InputRequiredException e) {
             throw new RuntimeException(e);
         }
+
+        return null;
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages,
-                             List<ToolSpecification> toolSpecifications,
-                             StreamingResponseHandler handler) {
+    public ResponseHandle sendMessages(List<ChatMessage> messages,
+                                       List<ToolSpecification> toolSpecifications,
+                                       StreamingResponseHandler handler) {
         throw new IllegalArgumentException("Tools are currently not supported for qwen models");
     }
 
     @Override
-    public void sendMessages(List<ChatMessage> messages,
-                             ToolSpecification toolSpecification,
-                             StreamingResponseHandler handler) {
+    public ResponseHandle sendMessages(List<ChatMessage> messages,
+                                       ToolSpecification toolSpecification,
+                                       StreamingResponseHandler handler) {
         throw new IllegalArgumentException("Tools are currently not supported for qwen models");
     }
 

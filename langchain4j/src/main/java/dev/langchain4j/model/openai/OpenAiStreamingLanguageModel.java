@@ -2,6 +2,7 @@ package dev.langchain4j.model.openai;
 
 import dev.ai4j.openai4j.OpenAiClient;
 import dev.ai4j.openai4j.completion.CompletionRequest;
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.language.StreamingLanguageModel;
@@ -60,7 +61,7 @@ public class OpenAiStreamingLanguageModel implements StreamingLanguageModel, Tok
     }
 
     @Override
-    public void process(String text, StreamingResponseHandler handler) {
+    public ResponseHandle process(String text, StreamingResponseHandler handler) {
 
         CompletionRequest request = CompletionRequest.builder()
                 .model(modelName)
@@ -68,7 +69,7 @@ public class OpenAiStreamingLanguageModel implements StreamingLanguageModel, Tok
                 .temperature(temperature)
                 .build();
 
-        client.completion(request)
+        dev.ai4j.openai4j.ResponseHandle responseHandle = client.completion(request)
                 .onPartialResponse(partialResponse -> {
                     String partialResponseText = partialResponse.text();
                     if (partialResponseText != null) {
@@ -78,6 +79,8 @@ public class OpenAiStreamingLanguageModel implements StreamingLanguageModel, Tok
                 .onComplete(handler::onComplete)
                 .onError(handler::onError)
                 .execute();
+
+        return responseHandle::cancel;
     }
 
     @Override

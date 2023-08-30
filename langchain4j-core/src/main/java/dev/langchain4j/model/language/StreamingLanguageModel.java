@@ -1,5 +1,6 @@
 package dev.langchain4j.model.language;
 
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.input.Prompt;
 
@@ -12,13 +13,13 @@ import static dev.langchain4j.model.input.structured.StructuredPromptProcessor.t
  */
 public interface StreamingLanguageModel {
 
-    void process(String text, StreamingResponseHandler handler);
+    ResponseHandle process(String text, StreamingResponseHandler handler);
 
-    default void process(Prompt prompt, StreamingResponseHandler handler) {
-        process(prompt.text(), handler);
+    default ResponseHandle process(Prompt prompt, StreamingResponseHandler handler) {
+        return process(prompt.text(), handler);
     }
 
-    default void process(Object structuredPrompt, StreamingResponseHandler handler) {
-        process(toPrompt(structuredPrompt), handler);
+    default ResponseHandle process(Object structuredPrompt, StreamingResponseHandler handler) {
+        return process(toPrompt(structuredPrompt), handler);
     }
 }

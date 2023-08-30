@@ -2,6 +2,7 @@ package dev.langchain4j.model.localai;
 
 import dev.ai4j.openai4j.OpenAiClient;
 import dev.ai4j.openai4j.completion.CompletionRequest;
+import dev.langchain4j.model.ResponseHandle;
 import dev.langchain4j.model.StreamingResponseHandler;
 import dev.langchain4j.model.language.StreamingLanguageModel;
 import lombok.Builder;
@@ -49,7 +50,7 @@ public class LocalAiStreamingLanguageModel implements StreamingLanguageModel {
     }
 
     @Override
-    public void process(String text, StreamingResponseHandler handler) {
+    public ResponseHandle process(String text, StreamingResponseHandler handler) {
 
         CompletionRequest request = CompletionRequest.builder()
                 .model(modelName)
@@ -59,7 +60,7 @@ public class LocalAiStreamingLanguageModel implements StreamingLanguageModel {
                 .maxTokens(maxTokens)
                 .build();
 
-        client.completion(request)
+        dev.ai4j.openai4j.ResponseHandle responseHandle = client.completion(request)
                 .onPartialResponse(partialResponse -> {
                     String partialResponseText = partialResponse.text();
                     if (partialResponseText != null) {
@@ -69,5 +70,7 @@ public class LocalAiStreamingLanguageModel implements StreamingLanguageModel {
                 .onComplete(handler::onComplete)
                 .onError(handler::onError)
                 .execute();
+
+        return responseHandle::cancel;
     }
 }
