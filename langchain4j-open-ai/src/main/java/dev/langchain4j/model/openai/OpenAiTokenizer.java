@@ -30,6 +30,18 @@ public class OpenAiTokenizer implements Tokenizer {
     private final String modelName;
     private final Optional<Encoding> encoding;
 
+    public OpenAiTokenizer() {
+        this(GPT_3_5_TURBO);
+    }
+
+    public OpenAiTokenizer(OpenAiChatModelName modelName) {
+        this(modelName.toString());
+    }
+
+    public OpenAiTokenizer(OpenAiLanguageModelName modelName) {
+        this(modelName.toString());
+    }
+
     public OpenAiTokenizer(String modelName) {
         this.modelName = ensureNotBlank(modelName, "modelName");
         // If the model is unknown, we should NOT fail fast during the creation of OpenAiTokenizer.

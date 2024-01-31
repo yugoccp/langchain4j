@@ -12,7 +12,6 @@ import java.util.List;
 
 import static dev.langchain4j.data.document.Metadata.metadata;
 import static dev.langchain4j.data.segment.TextSegment.textSegment;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -123,7 +122,7 @@ class DocumentByParagraphSplitterTest {
     void should_split_sample_text_containing_multiple_paragraphs() {
 
         int maxSegmentSize = 65;
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
 
         String p1 = "In a small town nestled between two vast mountains, there was a shop unlike any other. " +
                 "A unique haven. " +
@@ -200,7 +199,7 @@ class DocumentByParagraphSplitterTest {
 
         int maxSegmentSize = 65;
         int maxOverlapSize = 15;
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
 
         String s1 = "In a small town nestled between two vast mountains, there was a shop unlike any other.";
         String s2 = "A unique haven.";
@@ -269,7 +268,7 @@ class DocumentByParagraphSplitterTest {
     void should_split_sample_text_without_paragraphs() {
 
         int maxSegmentSize = 100;
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
 
         String segment1 = "In a small town nestled between two vast mountains, there was a shop unlike any other. " +
                 "A unique haven. " +
@@ -332,7 +331,7 @@ class DocumentByParagraphSplitterTest {
         // given
         int maxSegmentSize = 100;
         int maxOverlapSize = 25;
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
         DocumentSplitter splitter = new DocumentByParagraphSplitter(maxSegmentSize, maxOverlapSize, tokenizer);
 
         Document document = Document.from(sentences(0, 28), Metadata.from("document", "0"));
@@ -364,7 +363,7 @@ class DocumentByParagraphSplitterTest {
         // given
         int maxSegmentSize = 100;
         int maxOverlapSize = 80;
-        Tokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
         DocumentSplitter splitter = new DocumentByParagraphSplitter(maxSegmentSize, maxOverlapSize, tokenizer);
 
         Document document = Document.from(sentences(0, 28), Metadata.from("document", "0"));

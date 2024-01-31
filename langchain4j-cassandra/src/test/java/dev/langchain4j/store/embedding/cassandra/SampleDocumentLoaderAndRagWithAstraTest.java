@@ -59,7 +59,7 @@ class SampleDocumentLoaderAndRagWithAstraTest {
         Path path = new File(getClass().getResource("/story-about-happy-carrot.txt").getFile()).toPath();
         Document document = FileSystemDocumentLoader.loadDocument(path, new TextDocumentParser());
         DocumentSplitter splitter = DocumentSplitters
-                .recursive(100, 10, new OpenAiTokenizer(GPT_3_5_TURBO));
+                .recursive(100, 10, new OpenAiTokenizer());
 
         // Embedding model (OpenAI)
         EmbeddingModel embeddingModel = OpenAiEmbeddingModel.builder()

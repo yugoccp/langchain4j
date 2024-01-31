@@ -10,7 +10,6 @@ import java.util.List;
 
 import static dev.langchain4j.data.document.Metadata.metadata;
 import static dev.langchain4j.data.segment.TextSegment.textSegment;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -152,7 +151,7 @@ class DocumentBySentenceSplitterTest {
         );
 
         int maxSegmentSize = 26;
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        OpenAiTokenizer tokenizer = new OpenAiTokenizer();
         DocumentSplitter splitter = new DocumentBySentenceSplitter(maxSegmentSize, 0, tokenizer);
 
         List<TextSegment> segments = splitter.split(document);

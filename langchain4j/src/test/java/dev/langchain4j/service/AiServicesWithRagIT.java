@@ -8,6 +8,7 @@ import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.segment.TextSegment;
 import dev.langchain4j.memory.chat.MessageWindowChatMemory;
+import dev.langchain4j.model.Tokenizer;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.embedding.AllMiniLmL6V2QuantizedEmbeddingModel;
 import dev.langchain4j.model.embedding.EmbeddingModel;
@@ -44,7 +45,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import static dev.langchain4j.data.document.loader.FileSystemDocumentLoader.loadDocument;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -329,7 +329,7 @@ class AiServicesWithRagIT {
     }
 
     private void ingest(EmbeddingStore<TextSegment> embeddingStore, EmbeddingModel embeddingModel) {
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        Tokenizer tokenizer = new OpenAiTokenizer();
         DocumentSplitter splitter = DocumentSplitters.recursive(100, 0, tokenizer);
         EmbeddingStoreIngestor ingestor = EmbeddingStoreIngestor.builder()
                 .documentSplitter(splitter)

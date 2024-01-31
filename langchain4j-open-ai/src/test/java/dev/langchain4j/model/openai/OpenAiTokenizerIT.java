@@ -25,6 +25,7 @@ import static dev.langchain4j.data.message.AiMessage.aiMessage;
 import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.data.message.ToolExecutionResultMessage.toolExecutionResultMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
+import static dev.langchain4j.model.openai.OpenAiChatModelName.GPT_3_5_TURBO;
 import static java.util.Arrays.asList;
 import static java.util.Arrays.stream;
 import static java.util.Collections.singletonList;
@@ -1088,7 +1089,7 @@ class OpenAiTokenizerIT {
                 // TODO remove once they fix it
                 e.printStackTrace();
                 // there is some pattern to it, so we are going to check if this is really the case or our calculation is wrong
-                Tokenizer tokenizer2 = new OpenAiTokenizer(GPT_3_5_TURBO.toString());
+                Tokenizer tokenizer2 = new OpenAiTokenizer(GPT_3_5_TURBO);
                 int tokenCount2 = tokenizer2.estimateTokenCountInToolExecutionRequests(toolExecutionRequests);
                 assertThat(tokenCount2).isEqualTo(expectedTokenCount - 3);
             } else {

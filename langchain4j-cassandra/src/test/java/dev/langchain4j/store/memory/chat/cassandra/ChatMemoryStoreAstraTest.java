@@ -16,7 +16,6 @@ import java.util.UUID;
 import static com.dtsx.astra.sdk.utils.TestUtils.*;
 import static dev.langchain4j.data.message.AiMessage.aiMessage;
 import static dev.langchain4j.data.message.UserMessage.userMessage;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -53,7 +52,7 @@ public class ChatMemoryStoreAstraTest {
         ChatMemory chatMemory = TokenWindowChatMemory.builder()
                 .chatMemoryStore(chatMemoryStore)
                 .id(chatSessionId)
-                .maxTokens(300, new OpenAiTokenizer(GPT_3_5_TURBO))
+                .maxTokens(300, new OpenAiTokenizer())
                 .build();
 
         // When

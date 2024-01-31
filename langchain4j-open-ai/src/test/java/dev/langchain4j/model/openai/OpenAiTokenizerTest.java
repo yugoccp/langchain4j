@@ -9,13 +9,12 @@ import org.junit.jupiter.params.provider.EnumSource;
 import java.util.ArrayList;
 import java.util.List;
 
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static dev.langchain4j.model.openai.OpenAiTokenizer.countArguments;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class OpenAiTokenizerTest {
 
-    OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+    OpenAiTokenizer tokenizer = new OpenAiTokenizer();
 
     @Test
     void should_encode_and_decode_text() {

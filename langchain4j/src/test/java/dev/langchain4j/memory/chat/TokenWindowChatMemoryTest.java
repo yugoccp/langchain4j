@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import static dev.langchain4j.data.message.SystemMessage.systemMessage;
 import static dev.langchain4j.internal.TestUtils.*;
-import static dev.langchain4j.model.openai.OpenAiModelName.GPT_3_5_TURBO;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TokenWindowChatMemoryTest {
@@ -17,7 +16,7 @@ class TokenWindowChatMemoryTest {
     @Test
     void should_keep_specified_number_of_tokens_in_chat_memory() {
 
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        OpenAiTokenizer tokenizer = new OpenAiTokenizer();
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(33, tokenizer);
 
         UserMessage firstUserMessage = userMessageWithTokens(10);
@@ -78,7 +77,7 @@ class TokenWindowChatMemoryTest {
     @Test
     void should_not_remove_system_message_from_chat_memory() {
 
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        OpenAiTokenizer tokenizer = new OpenAiTokenizer();
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(33, tokenizer);
 
         SystemMessage systemMessage = systemMessageWithTokens(10);
@@ -118,7 +117,7 @@ class TokenWindowChatMemoryTest {
     @Test
     void should_keep_only_the_latest_system_message_in_chat_memory() {
 
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        OpenAiTokenizer tokenizer = new OpenAiTokenizer();
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(40, tokenizer);
 
         SystemMessage firstSystemMessage = systemMessage("You are a helpful assistant");
@@ -149,7 +148,7 @@ class TokenWindowChatMemoryTest {
     @Test
     void should_not_add_the_same_system_message_to_chat_memory_if_it_is_already_there() {
 
-        OpenAiTokenizer tokenizer = new OpenAiTokenizer(GPT_3_5_TURBO);
+        OpenAiTokenizer tokenizer = new OpenAiTokenizer();
         ChatMemory chatMemory = TokenWindowChatMemory.withMaxTokens(33, tokenizer);
 
         SystemMessage systemMessage = systemMessageWithTokens(10);
